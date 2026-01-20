@@ -53,7 +53,7 @@ This VPC is designed to support a production-style 3-tier AWS architecture with:
 
 ---
 
-## 4. Internet Gateway
+## 4. Internet Gateway(blogapp-igw)
 
 | Item | Value |
 |----|----|
@@ -62,7 +62,7 @@ This VPC is designed to support a production-style 3-tier AWS architecture with:
 
 ---
 
-## 5. NAT Gateway
+## 5. NAT Gateway(blogapp-natgw)
 
 | Item | Value |
 |----|----|
@@ -83,7 +83,7 @@ This VPC is designed to support a production-style 3-tier AWS architecture with:
 | Destination | Target |
 |----|----|
 | 10.0.0.0/16 | Local |
-| 0.0.0.0/0 | Internet Gateway |
+| 0.0.0.0/0 | Internet Gateway(blogapp-igw) |
 
 Associated with:
 - blogapp-sub-pub-1
@@ -96,7 +96,7 @@ Associated with:
 | Destination | Target |
 |----|----|
 | 10.0.0.0/16 | Local |
-| 0.0.0.0/0 | NAT Gateway |
+| 0.0.0.0/0 | NAT Gateway(blogapp-natgw) |
 
 Associated with:
 - blogapp-sub-app-1
@@ -120,7 +120,7 @@ Associated with:
 
 > Default NACL is replaced with custom NACLs for clarity.
 
-### Public Subnet NACL
+### Public Subnet NACL(blogapp-nacl-pub)
 
 **Inbound Rules**
 
@@ -139,7 +139,7 @@ Associated with:
 
 ---
 
-### Private App Subnet NACL
+### Private App Subnet NACL(blogapp-nacl-app)
 
 **Inbound Rules**
 
@@ -159,7 +159,7 @@ Associated with:
 
 ---
 
-### Private DB Subnet NACL
+### Private DB Subnet NACL(blogapp-nacl-db)
 
 **Inbound Rules**
 
@@ -178,7 +178,7 @@ Associated with:
 
 ## 8. Security Groups
 
-### Bastion Security Group
+### Bastion Security Group(blogapp-sg-bastion)
 
 | Direction | Protocol | Port | Source/Destination |
 |----|----|----|----|
@@ -186,23 +186,23 @@ Associated with:
 | Outbound | ALL | ALL | 0.0.0.0/0 |
 
 ---
-### ALB secuirty group
+### ALB secuirty group(blogapp-sg-alb)
 
 | Direction | Protocol | Port | Source/Destination |
 |----|----|----|----|
 | Inbound | TCP | 80 | 0.0.0.0/0 |
 | Inbound | TCP | 443 | 0.0.0.0/0 |
-| Outbound | TCP | 8080 | EC2 Security Group |
+| Outbound | TCP | 8080 | EC2 Security Group(blogapp-sg-asg) |
 
 ---
 
-### Application EC2 Security Group
+### Application EC2 Security Group(blogapp-sg-asg)
 
 | Direction | Protocol | Port | Source/Destination |
 |----|----|----|----|
-| Inbound | TCP | 8080 | ALB Security Group |
-| Inbound | TCP | 22 | Bastion Security Group |
-| Outbound | TCP | 5432 | DB Security Group |
+| Inbound | TCP | 8080 | ALB Security Group(blogapp-sg-alb) |
+| Inbound | TCP | 22 | Bastion Security Group(blogapp-sg-bastion) |
+| Outbound | TCP | 5432 | DB Security Group(blogapp-sg-db) |
 | Outbound | TCP | 443 | 0.0.0.0/0 |
 
 ---
@@ -211,8 +211,8 @@ Associated with:
 
 | Direction | Protocol | Port | Source/Destination |
 |----|----|----|----|
-| Inbound | TCP | 5432 | Application Security Group |
-| Outbound | ALL | ALL | Application Security Group |
+| Inbound | TCP | 5432 | Application Security Group(blogapp-sg-asg) |
+| Outbound | ALL | ALL | Application Security Group(blogapp-sg-asg) |
 
 ---
 
