@@ -125,7 +125,7 @@ locals {
       from_port  = 22
       to_port    = 22
       action     = "allow"
-      cidr_block = var.app_subnet_cidr[0]
+      cidr_block = var.public_subnet_cidr[0]
     },
     {
       name       = "ingress-allow-ephemeral-ports"

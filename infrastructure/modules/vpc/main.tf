@@ -46,16 +46,16 @@ output "igw_id" {
 
 
 
-# module "nacl" {
-#   source             = "./modules/nacl"
-#   vpc_id             = module.network.vpc_id
-#   public_subnet_ids  = module.network.public_subnet_ids
-#   app_subnet_ids     = module.network.app_subnet_ids
-#   db_subnet_ids      = module.network.db_subnet_ids
-#   name_prefix        = var.name_prefix
-#   tags               = var.tags
-#   public_subnet_cidr = var.public_subnet_cidr
-#   app_subnet_cidr    = var.app_subnet_cidr
-#   db_subnet_cidr     = var.db_subnet_cidr
+module "nacl" {
+  source             = "./modules/nacl"
+  vpc_id             = module.network.vpc_id
+  public_subnet_ids  = module.network.subnet_ids["pub"]
+  app_subnet_ids     = module.network.subnet_ids["app"]
+  db_subnet_ids      = module.network.subnet_ids["db"]
+  name_prefix        = var.name_prefix
+  tags               = var.tags
+  public_subnet_cidr = var.subnets["pub"]
+  app_subnet_cidr    = var.subnets["app"]
+  db_subnet_cidr     = var.subnets["db"]
 
-# }
+}
