@@ -14,6 +14,14 @@ module "igw" {
   name_prefix = var.name_prefix
   tags        = var.tags
 }
+
+module "security_group" {
+  source       = "./modules/security"
+  vpc_id       = module.network.vpc_id
+  name_prefix  = var.name_prefix
+  tags         = var.tags 
+}
+
 # module "nat" {
 #   source            = "./modules/nat"
 #   vpc_id            = module.network.vpc_id
@@ -23,27 +31,15 @@ module "igw" {
 
 # }
 
-output "subnet_ids" {
-  description = "List of subnet IDs"
-  value       = module.network.subnet_ids
+module "route_table" {
+  source             = "./modules/routetable"
+  vpc_id             = module.network.vpc_id
+  igw_id             = module.igw.igw_id
+  nat_gw_id          = module.nat.nat_gw_id
+  subnet_ids         = module.network.subnet_ids
+  name_prefix        = var.name_prefix
+  tags               = var.tags
 }
-
-output "subnet_info" {
-  description = "Detailed information about subnets"
-  value       = module.network.subnet_info
-}
-
-output "vpc_id" {
-  description = "The ID of the VPC"
-  value       = module.network.vpc_id
-}
-
-output "igw_id" {
-    description = "The ID of the Internet Gateway"
-    value       = module.igw.igw_id
-  
-}
-
 
 
 module "nacl" {

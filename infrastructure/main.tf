@@ -13,11 +13,3 @@ module "vpc" {
   tags        = var.tags
 }
 
-output "subnet_ids" {
-  description = "List of subnet IDs"
-  value       = module.vpc.subnet_ids
-}
-output "subnet_info" {
-  description = "Detailed information about subnets"
-  value       = module.vpc.subnet_info
-}
