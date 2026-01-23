@@ -23,6 +23,7 @@ variable "tags" {
 variable "no_of_azs" {
   description = "Number of availability zones to use"
   type        = number
+  default = 2
 }
 
 locals {
