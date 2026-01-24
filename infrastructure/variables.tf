@@ -23,7 +23,7 @@ variable "tags" {
 variable "no_of_azs" {
   description = "Number of availability zones to use"
   type        = number
-  default = 2
+  default     = 2
 }
 
 locals {
@@ -35,9 +35,15 @@ variable "subnets" {
   type        = map(list(string))
   default = {
     pub = []
-    app    = []
-    db     = []
+    app = []
+    db  = []
   }
 }
 
+variable "name_prefix" {
+  description = "Prefix for resource names"
+  type        = string
+  default     = "blogapp"
+  
+}
 

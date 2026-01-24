@@ -5,7 +5,7 @@ output "vpc_id" {
 
 output "subnet_ids" {
   description = "List of subnet IDs"
-  value       =local.subnets_by_tier
+  value       = local.subnets_by_tier
 }
 
 output "subnet_info" {

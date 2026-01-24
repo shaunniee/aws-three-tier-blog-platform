@@ -4,8 +4,8 @@ variable "name_prefix" {
 }
 
 variable "vpc_id" {
-    description = "VPC ID where resources will be created"
-    type        = string
+  description = "VPC ID where resources will be created"
+  type        = string
 }
 
 variable "tags" {
@@ -13,15 +13,6 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "backend_ami_id" {
-  description = "AMI ID for the backend instances"
-  type        = string
-}
-
-variable "backend_instance_type" {
-  description = "Instance type for the backend instances"
-  type        = string
-}
 
 variable "subnet_ids" {
   description = "Subnet IDs for the backend instances"
@@ -42,9 +33,13 @@ variable "app_user_data" {
   description = "User data script for backend EC2"
   type        = string
   default     = <<-EOF
-                #!/bin/bash
-                sudo apt update
-                sudo apt install -y nginx
-                sudo systemctl start nginx
-                EOF
+    #!/bin/bash
+    # Update packages
+    sudo yum update -y
+
+    # Install nginx
+    sudo amazon-linux-extras install -y nginx1
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+EOF
 }

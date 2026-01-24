@@ -55,7 +55,7 @@ locals {
   }
 }
 
-locals{
+locals {
   subnets_by_tier = {
     for tier, tier_map in local.subnets : tier => [
       for k, v in tier_map : aws_subnet.subnets_creation["${k}"].id
@@ -64,12 +64,12 @@ locals{
 }
 
 locals {
-  subnet_info={
-    for tier,tier_map in aws_subnet.subnets_creation: tier=>{
-      id:tier_map.id,
-      cidr: tier_map.cidr_block,
-      az: tier_map.availability_zone
-      tier: tier_map.tags["Name"]
+  subnet_info = {
+    for tier, tier_map in aws_subnet.subnets_creation : tier => {
+      id : tier_map.id,
+      cidr : tier_map.cidr_block,
+      az : tier_map.availability_zone
+      tier : tier_map.tags["Name"]
     }
   }
 }

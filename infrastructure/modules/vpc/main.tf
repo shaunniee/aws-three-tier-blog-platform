@@ -1,11 +1,11 @@
 
 module "network" {
-  source             = "./modules/network"
-  vpc_cidr           = var.vpc_cidr
-  subnets            = var.subnets
-  name_prefix        = var.name_prefix
-  tags               = var.tags
-  no_of_azs          = var.no_of_azs
+  source      = "./modules/network"
+  vpc_cidr    = var.vpc_cidr
+  subnets     = var.subnets
+  name_prefix = var.name_prefix
+  tags        = var.tags
+  no_of_azs   = var.no_of_azs
 }
 
 module "igw" {
@@ -22,14 +22,13 @@ module "security_group" {
   tags         = var.tags 
 }
 
-# module "nat" {
-#   source            = "./modules/nat"
-#   vpc_id            = module.network.vpc_id
-#   public_subnet_id = module.network.subnet_info["pub-1"].id
-#   tags              = var.tags
-#   name_prefix       = var.name_prefix
-
-# }
+module "nat" {
+  source            = "./modules/nat"
+  vpc_id            = module.network.vpc_id
+  public_subnet_id = module.network.subnet_info["pub-1"].id
+  tags              = var.tags
+  name_prefix       = var.name_prefix
+}
 
 module "route_table" {
   source             = "./modules/routetable"
@@ -55,3 +54,4 @@ module "nacl" {
   db_subnet_cidr     = var.subnets["db"]
 
 }
+

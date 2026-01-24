@@ -5,7 +5,7 @@ variable "name_prefix" {
 
 variable "subnet_ids" {
   description = "The subnet IDs for the DB subnet group"
-  type        = list(string)
+  type        = map(list(string))
 }
 
 variable "db_sg_id" {

@@ -47,7 +47,7 @@ variable "db_subnet_cidr" {
 variable "admin_ip" {
   description = "Admin ip for ssh"
   type        = string
-  default     = "192.168.0.93/32"
+  default     = "0.0.0.0/0"
 }
 
 locals {
@@ -87,9 +87,10 @@ locals {
       to_port    = 65535
       action     = "allow"
       cidr_block = "0.0.0.0/0"
-      }, {
+    },
+    {
       name       = "egress-allow-all"
-      rule_no    = 1000
+      rule_no    = 100
       protocol   = "-1"
       from_port  = 0
       to_port    = 0
@@ -106,16 +107,16 @@ locals {
     { name       = "ingress-allow-http-pub1"
       rule_no    = 100
       protocol   = "tcp"
-      from_port  = 8080
-      to_port    = 8080
+      from_port  = 80
+      to_port    = 80
       action     = "allow"
       cidr_block = var.public_subnet_cidr[0]
     },
     { name       = "ingress-allow-http-pub2"
       rule_no    = 101
       protocol   = "tcp"
-      from_port  = 8080
-      to_port    = 8080
+      from_port  = 80
+      to_port    = 80
       action     = "allow"
       cidr_block = var.public_subnet_cidr[1]
       }, {

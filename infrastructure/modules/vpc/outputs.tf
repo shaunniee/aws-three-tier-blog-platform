@@ -15,9 +15,9 @@ output "vpc_id" {
 }
 
 output "igw_id" {
-    description = "The ID of the Internet Gateway"
-    value       = module.igw.igw_id
-  
+  description = "The ID of the Internet Gateway"
+  value       = module.igw.igw_id
+
 }
 
 output "nat_gw_id" {
@@ -43,4 +43,10 @@ output "sg_asg_id" {
 output "sg_db_id" {
   description = "The ID of the DB Security Group"
   value = module.security_group.sg_db_id
+}
+
+output "app_rt_id" {
+    description = "The ID of the application route table"
+    value       = module.route_table.app_rt_id
+  
 }

@@ -30,3 +30,53 @@ output "nat_gw_id" {
   description = "The ID of the NAT Gateway"
   value       = module.vpc.nat_gw_id
 }
+
+output "bastion_public_ip" {
+  description = "Public IP address of the bastion host"
+  value       = module.bastion.bastion_public_ip
+}
+
+output "db_username" {
+  description = "The master username of the RDS DB instance"
+  value       = module.database_rds.db_username
+  
+}
+
+output "db_instance_endpoint" {
+  description = "The endpoint of the RDS DB instance"
+  value       = module.database_rds.db_instance_endpoint
+}
+
+output "db_name" {
+  description = "The name of the RDS DB instance"
+  value       = module.database_rds.db_name
+  
+}
+output "db_port" {
+  description = "The port of the RDS DB instance"
+  value       = module.database_rds.db_port
+  
+}
+
+output "s3_media_bucket_name" {
+    description = "The name of the S3 Media Bucket"
+    value       = module.s3_media_bucket.s3_media_bucket_name
+  
+}
+
+output "cognito_user_pool_id" {
+    description = "The ID of the Cognito User Pool"
+    value       = module.auth.cognito_user_pool_id
+  
+}
+
+output "cognito_client_id" {
+    description = "The ID of the Cognito User Pool Client"
+    value       = module.auth.cognito_client_id
+}
+
+output "db_secret_arn" {
+  description = "The ARN of the RDS DB instance secret"
+  value       = module.database_rds.db_secret_arn
+  
+}
