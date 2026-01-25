@@ -12,7 +12,7 @@ const uploadRoute = require('./routes/upload');
   const config = await loadConfig();
   process.env.S3_BUCKET = config.s3Bucket;
 
-  // await initDb(config);            // RDS connection via Secrets Manager ARN
+  await initDb(config);            // RDS connection via Secrets Manager ARN
   initS3(config);                  // S3 client
   initAuth(config.cognitoUserPoolId, process.env.AWS_REGION); // Cognito auth
 
@@ -23,5 +23,8 @@ const uploadRoute = require('./routes/upload');
   app.use('/posts', postsRoute);
   app.use('/upload', uploadRoute);
 
-  app.listen(3000, () => console.log('Backend running on port 3000'));
+  // Express example
+app.get('/health', (req, res) => res.status(200).send('OK'));
+
+  app.listen(80, () => console.log('Backend running on port 80'));
 })();

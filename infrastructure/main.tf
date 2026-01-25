@@ -28,6 +28,13 @@ module "backend" {
   alb_sg_id      = module.vpc.sg_alb_id
   name_prefix     = local.name_prefix
   tags           = var.tags
+  s3_arn         = module.s3_media_bucket.s3_bucket_arn
+  db_secret_arn  = module.database_rds.db_secret_arn
+  cog_user_pool_arn = module.auth.cog_user_pool_arn
+  
+  
+
+
 }
 
 module "database_rds" {
@@ -64,5 +71,9 @@ module "ssm" {
   cognito_user_pool_id = module.auth.cognito_user_pool_id
   cognito_client_id = module.auth.cognito_client_id
   
+}
 
+module "cd_cd" {
+  source = "./modules/ci_cd"  
+  github_oauth_token=var.github_oauth_token
 }

@@ -187,7 +187,8 @@ resource "aws_security_group" "db_sg" {
 resource "aws_vpc_security_group_ingress_rule" "db_ingress_asg" {
   description = "Allow traffic from ASG SG"
   security_group_id            = aws_security_group.db_sg.id
-  referenced_security_group_id = aws_security_group.asg_priv_sg.id
+  cidr_ipv4 = "0.0.0.0/0" //temporary
+  # referenced_security_group_id = aws_security_group.asg_priv_sg.id
   from_port                    = 5432
   to_port                      = 5432
   ip_protocol                  = "tcp"
@@ -208,6 +209,36 @@ resource "aws_vpc_security_group_egress_rule" "db_egress" {
     var.tags,
     {
       "Name" = "RDS Egress Rule"
+    }
+  )
+}
+
+
+# Temporary rule to allow all outbound traffic from db_sg
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress" {
+  description = "Allow all outbound traffic from ASG SG"
+  security_group_id = aws_security_group.db_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "ASG Egress All Rule"
+    }
+  )
+}
+
+# Temporary rule to allow all inbound traffic to db_sg
+
+resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
+  description = "Allow all inbound traffic to ASG SG"
+  security_group_id = aws_security_group.db_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "ASG Ingress All Rule"
     }
   )
 }

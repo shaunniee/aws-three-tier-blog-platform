@@ -80,3 +80,14 @@ output "db_secret_arn" {
   value       = module.database_rds.db_secret_arn
   
 }
+
+output "s3_bucket_arn" {
+    description = "The ARN of the S3 Media Bucket"
+    value       = module.s3_media_bucket.s3_bucket_arn
+  
+}
+output "cog_user_pool_arn" {
+    description = "The ARN of the Cognito User Pool"
+    value       = module.auth.cog_user_pool_arn
+  
+}

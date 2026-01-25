@@ -12,6 +12,9 @@ data "aws_ami" "image_id" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+
 
 resource "aws_lb" "backend_alb" {
   name               = "${var.name_prefix}-backend-alb"
@@ -42,7 +45,7 @@ resource "aws_lb_target_group" "aws_lb_tg" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path                = "/"
+    path                = "/health"
     port = "traffic-port"
     interval            = 30
     timeout             = 5
@@ -54,14 +57,25 @@ resource "aws_lb_target_group" "aws_lb_tg" {
   }
 }
 
+
+locals {
+  user_data = templatefile("${path.module}/user_data.sh", {
+    AWS_REGION   = "eu-west-1"
+    AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id
+  })
+}
+
 resource "aws_launch_template" "l_temp" {
   name_prefix            = "${var.name_prefix}-backend-lt-ch"
   image_id               = data.aws_ami.image_id.id
   instance_type          = "t3.micro"
   key_name               = "blogapp-backend-key"
   vpc_security_group_ids = [var.app_sg_id]
+  iam_instance_profile {
+    name = module.instance_profile.backend_instance_profile
+  }
 
-  user_data = base64encode(var.app_user_data)
+  user_data = base64encode(local.user_data)
 
   tag_specifications {
     resource_type = "instance"
@@ -89,7 +103,21 @@ resource "aws_autoscaling_group" "backend_asg" {
     propagate_at_launch = true
   }
 
+    instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+      instance_warmup        = 60
+    }
+    }
   health_check_type         = "ELB"
   health_check_grace_period = 300
 
+}
+
+module "instance_profile" {
+  source = "./instance_profile"
+  s3_arn = var.s3_arn
+  db_secret_arn = var.db_secret_arn
+  cog_user_pool_arn = var.cog_user_pool_arn
 }

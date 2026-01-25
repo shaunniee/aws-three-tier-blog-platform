@@ -7,6 +7,7 @@ resource "aws_db_instance" "rds_main" {
   identifier                  = "${var.name_prefix}-rds-main"
   db_name = "${var.name_prefix}rds"
   engine                      = "postgres"
+  publicly_accessible = true   // TEMPORARY: Set to false in production
   engine_version              = "17.6"
   instance_class              = "db.t3.micro"
   allocated_storage           = 20

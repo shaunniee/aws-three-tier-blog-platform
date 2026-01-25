@@ -1,0 +1,44 @@
+version: 0.2
+
+# ---------------
+# Phase: pre_build
+# ---------------
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+  # ----------------
+  # Phase: build
+  # ----------------
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t blog-backend .
+      - docker tag blog-backend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blog-backend:latest
+
+  # ----------------
+  # Phase: post_build
+  # ----------------
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blog-backend:latest
+      - echo Triggering ASG instance refresh...
+      - aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name blog-backend-asg \
+          --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":60}' \
+          --region $AWS_REGION
+
+# ----------------
+# Artifacts
+# ----------------
+artifacts:
+  type: NO_ARTIFACTS
+
+# ----------------
+# Environment variables (CodeBuild project should define these)
+# ----------------
+# AWS_ACCOUNT_ID -> your AWS account
+# AWS_REGION     -> region (e.g., eu-west-1)

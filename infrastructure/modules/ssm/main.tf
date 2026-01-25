@@ -22,6 +22,7 @@ resource "aws_ssm_parameter" "db_username" {
     value = var.db_username
 }
 
+
 resource "aws_ssm_parameter" "s3_media_bucket_name" {
     name  = "/blogapp/s3/media/bucket/name"
     type  = "String"
@@ -44,3 +45,4 @@ resource "aws_ssm_parameter" "cognito_client_id" {
     type  = "String"
     value = var.cognito_client_id
 }
+
