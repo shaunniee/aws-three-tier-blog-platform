@@ -1,6 +1,13 @@
 resource "aws_apigatewayv2_api" "backend_api" {
   name          = "blog-backend-api"
   protocol_type = "HTTP"
+
+    cors_configuration {
+    allow_origins = ["https://d1q65tnyq1iu77.cloudfront.net"]  # your frontend domain
+    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"] # all methods your frontend uses
+    allow_headers = ["Content-Type", "Authorization"]          # headers your frontend sends
+    max_age       = 3600
+  }
 }
 resource "aws_apigatewayv2_integration" "alb_integration" {
   api_id             = aws_apigatewayv2_api.backend_api.id
