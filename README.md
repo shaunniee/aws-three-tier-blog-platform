@@ -10,7 +10,7 @@ This VPC is designed to support a production-style 3-tier AWS architecture with:
 - Secure outbound internet access via NAT
 - DNS-based service discovery for AWS managed services
 
----
+---q
 
 ## 1. VPC Configuration
 
