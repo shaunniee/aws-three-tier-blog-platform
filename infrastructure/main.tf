@@ -71,9 +71,9 @@ module "ssm" {
   db_secret_arn = module.database_rds.db_secret_arn
   cognito_user_pool_id = module.auth.cognito_user_pool_id
   cognito_client_id = module.auth.cognito_client_id
-  cognito_domain = "https://${module.auth.cognito_domain}"
+  cognito_domain = "https://${module.auth.cognito_domain}.auth.${var.aws_region}.amazoncognito.com"
   alb_dns = module.api_gateway.api_gateway_url
-  cf_public_dns = "https://${module.frontend.cf_public_dns}.auth.${var.aws_region}.amazoncognito.com"
+  cf_public_dns = module.frontend.cf_public_dns
 }
 
 module "cd_cd" {
