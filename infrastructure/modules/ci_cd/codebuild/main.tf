@@ -57,7 +57,18 @@ resource "aws_iam_role_policy" "codebuild_artifacts_access" {
           "s3:GetObjectVersion"
         ]
         Resource = "arn:aws:s3:::${var.codepipeline_artifact_bucket}/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters"
+        ]
+        Resource = [
+          "arn:aws:ssm:eu-west-1:721937028630:parameter/blogapp/*"
+        ]
       }
+
     ]
   })
 }
@@ -128,6 +139,7 @@ resource "aws_codebuild_project" "frontend_build" {
       name  = "CLOUDFRONT_ID"
       value = var.cf_id
     }
+
   }
 
   artifacts { type = "CODEPIPELINE" }
