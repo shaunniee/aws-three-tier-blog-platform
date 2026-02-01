@@ -16,3 +16,7 @@ variable "codepipeline_artifact_bucket" {
     type = string
   
 }
+variable "asg_name" {
+    type = string
+  
+}

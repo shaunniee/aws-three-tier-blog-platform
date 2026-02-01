@@ -62,6 +62,10 @@ resource "aws_codebuild_project" "backend_build" {
       name  = "AWS_REGION"
       value = var.AWS_REGION
     }
+    environment_variable {
+      name = "ASG_NAME"
+      value = var.asg_name
+    }
   }
 
   artifacts { type = "NO_ARTIFACTS" }

@@ -76,4 +76,7 @@ module "ssm" {
 module "cd_cd" {
   source = "./modules/ci_cd"  
   github_oauth_token=var.github_oauth_token
+  asg_name=module.backend.asg_name
+  
+
 }

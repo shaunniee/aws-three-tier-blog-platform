@@ -14,6 +14,7 @@ module "s3_artifact" {
 module "codebuild" {
   source = "./codebuild"
     codepipeline_artifact_bucket= module.s3_artifact.s3_artifact_name
+    asg_name = var.asg_name
     
 }
 

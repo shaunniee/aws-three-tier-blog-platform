@@ -16,3 +16,9 @@ variable "github_oauth_token" {
   type        = string
   sensitive   = true
 }
+
+variable "asg_name" {
+    description = "asg name"
+    type = string
+  
+}

@@ -20,7 +20,6 @@ phases:
       - echo Pushing Docker image to ECR...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blog-backend:latest
       - echo Triggering ASG instance refresh...
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name blog-backend-asg --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":60}' --region $AWS_REGION
-
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":60}' --region $AWS_REGION
 artifacts:
   type: NO_ARTIFACTS
