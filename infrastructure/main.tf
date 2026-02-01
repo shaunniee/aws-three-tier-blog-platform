@@ -71,7 +71,7 @@ module "ssm" {
   cognito_user_pool_id = module.auth.cognito_user_pool_id
   cognito_client_id = module.auth.cognito_client_id
   cognito_domain = module.auth.cognito_domain
-  alb_dns = module.backend.alb_public_dns
+  alb_dns = module.api_gateway.api_gateway_url
   
   
   
@@ -91,4 +91,10 @@ module "cd_cd" {
 module "frontend" {
   source = "./modules/frontend"
   
+}
+
+module "api_gateway" {
+  source          = "./modules/api_gateway"
+  backend_alb_dns = module.backend.alb_public_dns
+
 }
