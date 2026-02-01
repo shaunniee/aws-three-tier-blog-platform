@@ -160,6 +160,11 @@ resource "aws_codebuild_project" "frontend_build" {
           type = "PARAMETER_STORE"
           value = "/blogapp/cognito/domain"
         }
+           environment_variable {
+          name = "VITE_CALLBACK_URL"
+          type = "PARAMETER_STORE"
+          value = "/blogapp/cloudfront/public_dns"
+        }
 
 
   }

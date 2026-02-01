@@ -91,3 +91,8 @@ output "cog_user_pool_arn" {
     value       = module.auth.cog_user_pool_arn
   
 }
+output "cf_public_dns" {
+    description = "The CloudFront Public DNS"
+    value       = module.frontend.cf_public_dns
+  
+}

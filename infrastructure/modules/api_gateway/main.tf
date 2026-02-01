@@ -3,7 +3,7 @@ resource "aws_apigatewayv2_api" "backend_api" {
   protocol_type = "HTTP"
 
     cors_configuration {
-    allow_origins = [var.cf_public_dns]  # your frontend domain
+    allow_origins = ["https://${var.cf_public_dns}"]  # your frontend domain
     allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"] # all methods your frontend uses
     allow_headers = ["Content-Type", "Authorization"]          # headers your frontend sends
     max_age       = 3600

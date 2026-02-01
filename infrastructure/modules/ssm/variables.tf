@@ -44,3 +44,7 @@ variable "alb_dns" {
   description = "The DNS of the Application Load Balancer"
   type        = string
 }
+variable "cf_public_dns" {
+  description = "The CloudFront Public DNS"
+  type        = string
+}

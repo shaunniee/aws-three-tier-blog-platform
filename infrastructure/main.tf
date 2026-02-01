@@ -55,6 +55,7 @@ module "s3_media_bucket" {
 
 module "auth" {
   source      = "./modules/auth"
+  cf_public_dns = module.frontend.cf_public_dns
   name_prefix = var.name_prefix
   tags        = var.tags
 }
@@ -72,9 +73,7 @@ module "ssm" {
   cognito_client_id = module.auth.cognito_client_id
   cognito_domain = module.auth.cognito_domain
   alb_dns = module.api_gateway.api_gateway_url
-  
-  
-  
+  cf_public_dns = "https://${module.frontend.cf_public_dns}"
 }
 
 module "cd_cd" {

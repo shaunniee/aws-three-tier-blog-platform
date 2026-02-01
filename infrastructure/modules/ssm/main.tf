@@ -57,3 +57,8 @@ resource "aws_ssm_parameter" "alb_dns" {
     type  = "String"
     value = var.alb_dns
 }
+resource "aws_ssm_parameter" "cf_public_dns" {
+    name  = "/blogapp/cloudfront/public_dns"
+    type  = "String"
+    value = var.cf_public_dns
+}

@@ -35,9 +35,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
 allowed_oauth_flows = ["implicit"]
 allowed_oauth_scopes = ["openid", "email"]
 generate_secret = false
-callback_urls = ["http://localhost:5173"]
-default_redirect_uri = "http://localhost:5173"
-logout_urls = ["http://localhost:5173"]
+callback_urls = ["http://localhost:5173","https://${var.cf_public_dns}","https://${var.cf_public_dns}/*"]
+logout_urls = ["http://localhost:5173","https://${var.cf_public_dns}","https://${var.cf_public_dns}/*"]
     prevent_user_existence_errors = "ENABLED"
 }
 
