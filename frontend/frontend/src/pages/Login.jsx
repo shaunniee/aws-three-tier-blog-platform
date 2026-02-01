@@ -1,5 +1,5 @@
 export default function Login() {
-  const REDIRECT_URI = import.meta.env.VITE_CALLBACK_URL;
+  const REDIRECT_URI = `https://${import.meta.env.VITE_CALLBACK_URL}`;
   const loginUrl = `${import.meta.env.VITE_COGNITO_DOMAIN}/login?` +
                  `response_type=token&` +
                  `client_id=${import.meta.env.VITE_COGNITO_CLIENT_ID}&` +
