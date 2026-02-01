@@ -30,7 +30,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
         ],
-        Resource = "arn:aws:ecr:${var.aws_region}:${var.aws_account_id}:blog-backend/*"
+        Resource = "arn:aws:ecr:${var.aws_region}:${var.aws_account_id}:repository/blog-backend"
       },
       {
         Effect = "Allow",
