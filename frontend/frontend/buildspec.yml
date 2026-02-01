@@ -4,12 +4,10 @@ phases:
   install:
     commands:
       - echo Installing Node.js 20...
-      # Alpine example — adjust if using Amazon Linux
-      - apk add --no-cache curl tar bash
-      - curl -fsSL https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz -o /tmp/node20.tar.xz
-      - tar -xf /tmp/node20.tar.xz -C /usr/local --strip-components=1
+      - curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+      - yum install -y nodejs
       - node -v
-      - npm -v
+      - npm -
       - echo Installing dependencies...
       - cd frontend/frontend
       - npm ci
