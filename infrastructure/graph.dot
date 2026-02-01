@@ -1,0 +1,294 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  "data.aws_caller_identity.current" [label="data.aws_caller_identity.current"];
+  subgraph "cluster_module.api_gateway" {
+    label = "module.api_gateway"
+    fontname = "sans-serif"
+    "module.api_gateway.aws_apigatewayv2_api.backend_api" [label="aws_apigatewayv2_api.backend_api"];
+    "module.api_gateway.aws_apigatewayv2_integration.alb_integration" [label="aws_apigatewayv2_integration.alb_integration"];
+    "module.api_gateway.aws_apigatewayv2_route.proxy_route" [label="aws_apigatewayv2_route.proxy_route"];
+    "module.api_gateway.aws_apigatewayv2_stage.prod" [label="aws_apigatewayv2_stage.prod"];
+  }
+  subgraph "cluster_module.auth" {
+    label = "module.auth"
+    fontname = "sans-serif"
+    "module.auth.aws_cognito_user_pool.user_pool" [label="aws_cognito_user_pool.user_pool"];
+    "module.auth.aws_cognito_user_pool_client.user_pool_client" [label="aws_cognito_user_pool_client.user_pool_client"];
+    "module.auth.aws_cognito_user_pool_domain.blog_domain" [label="aws_cognito_user_pool_domain.blog_domain"];
+  }
+  subgraph "cluster_module.backend" {
+    label = "module.backend"
+    fontname = "sans-serif"
+    "module.backend.data.aws_ami.image_id" [label="data.aws_ami.image_id"];
+    "module.backend.aws_autoscaling_group.backend_asg" [label="aws_autoscaling_group.backend_asg"];
+    "module.backend.aws_ecr_repository.blogapp_backend_repo" [label="aws_ecr_repository.blogapp_backend_repo"];
+    "module.backend.aws_launch_template.l_temp" [label="aws_launch_template.l_temp"];
+    "module.backend.aws_lb.backend_alb" [label="aws_lb.backend_alb"];
+    "module.backend.aws_lb_listener.aws_lb_listener" [label="aws_lb_listener.aws_lb_listener"];
+    "module.backend.aws_lb_target_group.aws_lb_tg" [label="aws_lb_target_group.aws_lb_tg"];
+  }
+  subgraph "cluster_module.backend.module.instance_profile" {
+    label = "module.backend.module.instance_profile"
+    fontname = "sans-serif"
+    "module.backend.module.instance_profile.aws_iam_instance_profile.ec2_backend_profile" [label="aws_iam_instance_profile.ec2_backend_profile"];
+    "module.backend.module.instance_profile.aws_iam_role.ec2_backend_role" [label="aws_iam_role.ec2_backend_role"];
+    "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" [label="aws_iam_role_policy.ec2_backend_inline"];
+    "module.backend.module.instance_profile.aws_iam_role_policy_attachment.ec2_ssm" [label="aws_iam_role_policy_attachment.ec2_ssm"];
+  }
+  subgraph "cluster_module.bastion" {
+    label = "module.bastion"
+    fontname = "sans-serif"
+    "module.bastion.data.aws_ami.bastion_ami" [label="data.aws_ami.bastion_ami"];
+    "module.bastion.aws_instance.bastion" [label="aws_instance.bastion"];
+  }
+  subgraph "cluster_module.ci_cd.module.codebuild" {
+    label = "module.ci_cd.module.codebuild"
+    fontname = "sans-serif"
+    "module.ci_cd.module.codebuild.aws_codebuild_project.backend_build" [label="aws_codebuild_project.backend_build"];
+    "module.ci_cd.module.codebuild.aws_codebuild_project.frontend_build" [label="aws_codebuild_project.frontend_build"];
+    "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role" [label="aws_iam_role.codebuild_role"];
+    "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_artifacts_access" [label="aws_iam_role_policy.codebuild_artifacts_access"];
+    "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_policy" [label="aws_iam_role_policy.codebuild_policy"];
+    "module.ci_cd.module.codebuild.aws_iam_role_policy.frontend_codebuild_policy" [label="aws_iam_role_policy.frontend_codebuild_policy"];
+  }
+  subgraph "cluster_module.ci_cd.module.codepipeline" {
+    label = "module.ci_cd.module.codepipeline"
+    fontname = "sans-serif"
+    "module.ci_cd.module.codepipeline.aws_codepipeline.backend_pipeline" [label="aws_codepipeline.backend_pipeline"];
+    "module.ci_cd.module.codepipeline.aws_iam_role.codepipeline_role" [label="aws_iam_role.codepipeline_role"];
+    "module.ci_cd.module.codepipeline.aws_iam_role_policy.codepipeline_policy" [label="aws_iam_role_policy.codepipeline_policy"];
+  }
+  subgraph "cluster_module.ci_cd.module.s3_artifact" {
+    label = "module.ci_cd.module.s3_artifact"
+    fontname = "sans-serif"
+    "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts" [label="aws_s3_bucket.codepipeline_artifacts"];
+    "module.ci_cd.module.s3_artifact.aws_s3_bucket_lifecycle_configuration.artifacts_lifecycle" [label="aws_s3_bucket_lifecycle_configuration.artifacts_lifecycle"];
+    "module.ci_cd.module.s3_artifact.aws_s3_bucket_public_access_block.example" [label="aws_s3_bucket_public_access_block.example"];
+    "module.ci_cd.module.s3_artifact.random_id.bucket_suffix" [label="random_id.bucket_suffix"];
+  }
+  subgraph "cluster_module.database_rds" {
+    label = "module.database_rds"
+    fontname = "sans-serif"
+    "module.database_rds.aws_db_instance.rds_main" [label="aws_db_instance.rds_main"];
+    "module.database_rds.aws_db_subnet_group.db_subnets" [label="aws_db_subnet_group.db_subnets"];
+  }
+  subgraph "cluster_module.frontend.module.cf" {
+    label = "module.frontend.module.cf"
+    fontname = "sans-serif"
+    "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn" [label="aws_cloudfront_distribution.frontend_cdn"];
+    "module.frontend.module.cf.aws_cloudfront_origin_access_identity.frontend_oai" [label="aws_cloudfront_origin_access_identity.frontend_oai"];
+  }
+  subgraph "cluster_module.frontend.module.s3_hosting" {
+    label = "module.frontend.module.s3_hosting"
+    fontname = "sans-serif"
+    "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket" [label="aws_s3_bucket.frontend_bucket"];
+    "module.frontend.module.s3_hosting.aws_s3_bucket_public_access_block.frontend_bucket_block" [label="aws_s3_bucket_public_access_block.frontend_bucket_block"];
+    "module.frontend.module.s3_hosting.aws_s3_bucket_website_configuration.frontend_bucket_website" [label="aws_s3_bucket_website_configuration.frontend_bucket_website"];
+    "module.frontend.module.s3_hosting.random_id.frontend_bucket_suffix" [label="random_id.frontend_bucket_suffix"];
+  }
+  subgraph "cluster_module.iam" {
+    label = "module.iam"
+    fontname = "sans-serif"
+    "module.iam.aws_s3_bucket_policy.frontend_bucket_policy" [label="aws_s3_bucket_policy.frontend_bucket_policy"];
+  }
+  subgraph "cluster_module.network.module.igw" {
+    label = "module.network.module.igw"
+    fontname = "sans-serif"
+    "module.network.module.igw.aws_internet_gateway.igw" [label="aws_internet_gateway.igw"];
+  }
+  subgraph "cluster_module.network.module.nacl" {
+    label = "module.network.module.nacl"
+    fontname = "sans-serif"
+    "module.network.module.nacl.aws_network_acl.app_network_acl" [label="aws_network_acl.app_network_acl"];
+    "module.network.module.nacl.aws_network_acl.db_network_acl" [label="aws_network_acl.db_network_acl"];
+    "module.network.module.nacl.aws_network_acl.public_network_acl" [label="aws_network_acl.public_network_acl"];
+    "module.network.module.nacl.aws_network_acl_rule.app_network_acl_rules" [label="aws_network_acl_rule.app_network_acl_rules"];
+    "module.network.module.nacl.aws_network_acl_rule.db_network_acl_rules" [label="aws_network_acl_rule.db_network_acl_rules"];
+    "module.network.module.nacl.aws_network_acl_rule.public_network_acl_rules" [label="aws_network_acl_rule.public_network_acl_rules"];
+  }
+  subgraph "cluster_module.network.module.nat" {
+    label = "module.network.module.nat"
+    fontname = "sans-serif"
+    "module.network.module.nat.aws_eip.nat_eip" [label="aws_eip.nat_eip"];
+    "module.network.module.nat.aws_nat_gateway.nat_gateway" [label="aws_nat_gateway.nat_gateway"];
+  }
+  subgraph "cluster_module.network.module.route_table" {
+    label = "module.network.module.route_table"
+    fontname = "sans-serif"
+    "module.network.module.route_table.aws_route_table.app_rt" [label="aws_route_table.app_rt"];
+    "module.network.module.route_table.aws_route_table.db_rt" [label="aws_route_table.db_rt"];
+    "module.network.module.route_table.aws_route_table.pub_rt" [label="aws_route_table.pub_rt"];
+    "module.network.module.route_table.aws_route_table_association.app_rt_subnets" [label="aws_route_table_association.app_rt_subnets"];
+    "module.network.module.route_table.aws_route_table_association.db_rt_subnets" [label="aws_route_table_association.db_rt_subnets"];
+    "module.network.module.route_table.aws_route_table_association.pub_rt_subnets" [label="aws_route_table_association.pub_rt_subnets"];
+  }
+  subgraph "cluster_module.network.module.security_group" {
+    label = "module.network.module.security_group"
+    fontname = "sans-serif"
+    "module.network.module.security_group.aws_security_group.alb_pub_sg" [label="aws_security_group.alb_pub_sg"];
+    "module.network.module.security_group.aws_security_group.asg_priv_sg" [label="aws_security_group.asg_priv_sg"];
+    "module.network.module.security_group.aws_security_group.bastion_sg" [label="aws_security_group.bastion_sg"];
+    "module.network.module.security_group.aws_security_group.db_sg" [label="aws_security_group.db_sg"];
+    "module.network.module.security_group.aws_vpc_security_group_egress_rule.alb_egress_asg" [label="aws_vpc_security_group_egress_rule.alb_egress_asg"];
+    "module.network.module.security_group.aws_vpc_security_group_egress_rule.asg_egress_db" [label="aws_vpc_security_group_egress_rule.asg_egress_db"];
+    "module.network.module.security_group.aws_vpc_security_group_egress_rule.asg_egress_https" [label="aws_vpc_security_group_egress_rule.asg_egress_https"];
+    "module.network.module.security_group.aws_vpc_security_group_egress_rule.bastion_egress" [label="aws_vpc_security_group_egress_rule.bastion_egress"];
+    "module.network.module.security_group.aws_vpc_security_group_egress_rule.db_egress" [label="aws_vpc_security_group_egress_rule.db_egress"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.alb_ingress_http" [label="aws_vpc_security_group_ingress_rule.alb_ingress_http"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.alb_ingress_https" [label="aws_vpc_security_group_ingress_rule.alb_ingress_https"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_alb" [label="aws_vpc_security_group_ingress_rule.asg_ingress_alb"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_bastion" [label="aws_vpc_security_group_ingress_rule.asg_ingress_bastion"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.bastion_ingress" [label="aws_vpc_security_group_ingress_rule.bastion_ingress"];
+    "module.network.module.security_group.aws_vpc_security_group_ingress_rule.db_ingress_asg" [label="aws_vpc_security_group_ingress_rule.db_ingress_asg"];
+  }
+  subgraph "cluster_module.network.module.vpc" {
+    label = "module.network.module.vpc"
+    fontname = "sans-serif"
+    "module.network.module.vpc.data.aws_availability_zones.azs" [label="data.aws_availability_zones.azs"];
+    "module.network.module.vpc.aws_subnet.subnets_creation" [label="aws_subnet.subnets_creation"];
+    "module.network.module.vpc.aws_vpc.main_vpc" [label="aws_vpc.main_vpc"];
+  }
+  subgraph "cluster_module.s3_media_bucket" {
+    label = "module.s3_media_bucket"
+    fontname = "sans-serif"
+    "module.s3_media_bucket.aws_s3_bucket.s3_media" [label="aws_s3_bucket.s3_media"];
+    "module.s3_media_bucket.aws_s3_bucket_policy.s3_media_bucket_policy" [label="aws_s3_bucket_policy.s3_media_bucket_policy"];
+    "module.s3_media_bucket.aws_s3_bucket_public_access_block.public_access_block" [label="aws_s3_bucket_public_access_block.public_access_block"];
+    "module.s3_media_bucket.aws_s3_bucket_server_side_encryption_configuration.sse" [label="aws_s3_bucket_server_side_encryption_configuration.sse"];
+    "module.s3_media_bucket.aws_vpc_endpoint.s3_endpoint" [label="aws_vpc_endpoint.s3_endpoint"];
+  }
+  subgraph "cluster_module.ssm" {
+    label = "module.ssm"
+    fontname = "sans-serif"
+    "module.ssm.aws_ssm_parameter.alb_dns" [label="aws_ssm_parameter.alb_dns"];
+    "module.ssm.aws_ssm_parameter.cf_public_dns" [label="aws_ssm_parameter.cf_public_dns"];
+    "module.ssm.aws_ssm_parameter.cognito_client_id" [label="aws_ssm_parameter.cognito_client_id"];
+    "module.ssm.aws_ssm_parameter.cognito_domain" [label="aws_ssm_parameter.cognito_domain"];
+    "module.ssm.aws_ssm_parameter.cognito_user_pool_id" [label="aws_ssm_parameter.cognito_user_pool_id"];
+    "module.ssm.aws_ssm_parameter.db_endpoint" [label="aws_ssm_parameter.db_endpoint"];
+    "module.ssm.aws_ssm_parameter.db_name" [label="aws_ssm_parameter.db_name"];
+    "module.ssm.aws_ssm_parameter.db_port" [label="aws_ssm_parameter.db_port"];
+    "module.ssm.aws_ssm_parameter.db_secret_arn" [label="aws_ssm_parameter.db_secret_arn"];
+    "module.ssm.aws_ssm_parameter.db_username" [label="aws_ssm_parameter.db_username"];
+    "module.ssm.aws_ssm_parameter.s3_media_bucket_name" [label="aws_ssm_parameter.s3_media_bucket_name"];
+  }
+  "module.api_gateway.aws_apigatewayv2_api.backend_api" -> "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn";
+  "module.api_gateway.aws_apigatewayv2_integration.alb_integration" -> "module.api_gateway.aws_apigatewayv2_api.backend_api";
+  "module.api_gateway.aws_apigatewayv2_integration.alb_integration" -> "module.backend.aws_lb.backend_alb";
+  "module.api_gateway.aws_apigatewayv2_route.proxy_route" -> "module.api_gateway.aws_apigatewayv2_integration.alb_integration";
+  "module.api_gateway.aws_apigatewayv2_stage.prod" -> "module.api_gateway.aws_apigatewayv2_api.backend_api";
+  "module.auth.aws_cognito_user_pool_client.user_pool_client" -> "module.auth.aws_cognito_user_pool.user_pool";
+  "module.auth.aws_cognito_user_pool_client.user_pool_client" -> "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn";
+  "module.auth.aws_cognito_user_pool_domain.blog_domain" -> "module.auth.aws_cognito_user_pool_client.user_pool_client";
+  "module.backend.aws_autoscaling_group.backend_asg" -> "module.backend.aws_launch_template.l_temp";
+  "module.backend.aws_autoscaling_group.backend_asg" -> "module.backend.aws_lb_target_group.aws_lb_tg";
+  "module.backend.aws_autoscaling_group.backend_asg" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.backend.aws_launch_template.l_temp" -> "data.aws_caller_identity.current";
+  "module.backend.aws_launch_template.l_temp" -> "module.backend.data.aws_ami.image_id";
+  "module.backend.aws_launch_template.l_temp" -> "module.backend.module.instance_profile.aws_iam_instance_profile.ec2_backend_profile";
+  "module.backend.aws_launch_template.l_temp" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.backend.aws_lb.backend_alb" -> "module.network.module.security_group.aws_security_group.alb_pub_sg";
+  "module.backend.aws_lb.backend_alb" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.backend.aws_lb_listener.aws_lb_listener" -> "module.backend.aws_lb.backend_alb";
+  "module.backend.aws_lb_listener.aws_lb_listener" -> "module.backend.aws_lb_target_group.aws_lb_tg";
+  "module.backend.aws_lb_target_group.aws_lb_tg" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.backend.module.instance_profile.aws_iam_instance_profile.ec2_backend_profile" -> "module.backend.module.instance_profile.aws_iam_role.ec2_backend_role";
+  "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" -> "data.aws_caller_identity.current";
+  "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" -> "module.auth.aws_cognito_user_pool.user_pool";
+  "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" -> "module.backend.module.instance_profile.aws_iam_role.ec2_backend_role";
+  "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.backend.module.instance_profile.aws_iam_role_policy.ec2_backend_inline" -> "module.s3_media_bucket.aws_s3_bucket.s3_media";
+  "module.backend.module.instance_profile.aws_iam_role_policy_attachment.ec2_ssm" -> "module.backend.module.instance_profile.aws_iam_role.ec2_backend_role";
+  "module.bastion.aws_instance.bastion" -> "module.bastion.data.aws_ami.bastion_ami";
+  "module.bastion.aws_instance.bastion" -> "module.network.module.security_group.aws_security_group.bastion_sg";
+  "module.bastion.aws_instance.bastion" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.ci_cd.module.codebuild.aws_codebuild_project.backend_build" -> "module.backend.aws_autoscaling_group.backend_asg";
+  "module.ci_cd.module.codebuild.aws_codebuild_project.backend_build" -> "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role";
+  "module.ci_cd.module.codebuild.aws_codebuild_project.frontend_build" -> "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role";
+  "module.ci_cd.module.codebuild.aws_codebuild_project.frontend_build" -> "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_artifacts_access" -> "data.aws_caller_identity.current";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_artifacts_access" -> "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_artifacts_access" -> "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_policy" -> "module.backend.aws_autoscaling_group.backend_asg";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.codebuild_policy" -> "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.frontend_codebuild_policy" -> "module.ci_cd.module.codebuild.aws_iam_role.codebuild_role";
+  "module.ci_cd.module.codebuild.aws_iam_role_policy.frontend_codebuild_policy" -> "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn";
+  "module.ci_cd.module.codepipeline.aws_codepipeline.backend_pipeline" -> "module.ci_cd.module.codebuild.aws_codebuild_project.backend_build";
+  "module.ci_cd.module.codepipeline.aws_codepipeline.backend_pipeline" -> "module.ci_cd.module.codebuild.aws_codebuild_project.frontend_build";
+  "module.ci_cd.module.codepipeline.aws_codepipeline.backend_pipeline" -> "module.ci_cd.module.codepipeline.aws_iam_role.codepipeline_role";
+  "module.ci_cd.module.codepipeline.aws_codepipeline.backend_pipeline" -> "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts";
+  "module.ci_cd.module.codepipeline.aws_iam_role_policy.codepipeline_policy" -> "module.ci_cd.module.codebuild.aws_codebuild_project.backend_build";
+  "module.ci_cd.module.codepipeline.aws_iam_role_policy.codepipeline_policy" -> "module.ci_cd.module.codebuild.aws_codebuild_project.frontend_build";
+  "module.ci_cd.module.codepipeline.aws_iam_role_policy.codepipeline_policy" -> "module.ci_cd.module.codepipeline.aws_iam_role.codepipeline_role";
+  "module.ci_cd.module.codepipeline.aws_iam_role_policy.codepipeline_policy" -> "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts";
+  "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts" -> "module.ci_cd.module.s3_artifact.random_id.bucket_suffix";
+  "module.ci_cd.module.s3_artifact.aws_s3_bucket_lifecycle_configuration.artifacts_lifecycle" -> "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts";
+  "module.ci_cd.module.s3_artifact.aws_s3_bucket_public_access_block.example" -> "module.ci_cd.module.s3_artifact.aws_s3_bucket.codepipeline_artifacts";
+  "module.database_rds.aws_db_instance.rds_main" -> "module.database_rds.aws_db_subnet_group.db_subnets";
+  "module.database_rds.aws_db_instance.rds_main" -> "module.network.module.security_group.aws_security_group.db_sg";
+  "module.database_rds.aws_db_subnet_group.db_subnets" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn" -> "module.frontend.module.cf.aws_cloudfront_origin_access_identity.frontend_oai";
+  "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn" -> "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket";
+  "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket" -> "module.frontend.module.s3_hosting.random_id.frontend_bucket_suffix";
+  "module.frontend.module.s3_hosting.aws_s3_bucket_public_access_block.frontend_bucket_block" -> "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket";
+  "module.frontend.module.s3_hosting.aws_s3_bucket_website_configuration.frontend_bucket_website" -> "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket";
+  "module.iam.aws_s3_bucket_policy.frontend_bucket_policy" -> "module.frontend.module.cf.aws_cloudfront_origin_access_identity.frontend_oai";
+  "module.iam.aws_s3_bucket_policy.frontend_bucket_policy" -> "module.frontend.module.s3_hosting.aws_s3_bucket.frontend_bucket";
+  "module.network.module.igw.aws_internet_gateway.igw" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.nacl.aws_network_acl.app_network_acl" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.nacl.aws_network_acl.db_network_acl" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.nacl.aws_network_acl.public_network_acl" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.nacl.aws_network_acl_rule.app_network_acl_rules" -> "module.network.module.nacl.aws_network_acl.app_network_acl";
+  "module.network.module.nacl.aws_network_acl_rule.db_network_acl_rules" -> "module.network.module.nacl.aws_network_acl.db_network_acl";
+  "module.network.module.nacl.aws_network_acl_rule.public_network_acl_rules" -> "module.network.module.nacl.aws_network_acl.public_network_acl";
+  "module.network.module.nat.aws_nat_gateway.nat_gateway" -> "module.network.module.nat.aws_eip.nat_eip";
+  "module.network.module.nat.aws_nat_gateway.nat_gateway" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.route_table.aws_route_table.app_rt" -> "module.network.module.nat.aws_nat_gateway.nat_gateway";
+  "module.network.module.route_table.aws_route_table.db_rt" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.route_table.aws_route_table.pub_rt" -> "module.network.module.igw.aws_internet_gateway.igw";
+  "module.network.module.route_table.aws_route_table_association.app_rt_subnets" -> "module.network.module.route_table.aws_route_table.app_rt";
+  "module.network.module.route_table.aws_route_table_association.db_rt_subnets" -> "module.network.module.route_table.aws_route_table.db_rt";
+  "module.network.module.route_table.aws_route_table_association.db_rt_subnets" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.route_table.aws_route_table_association.pub_rt_subnets" -> "module.network.module.route_table.aws_route_table.pub_rt";
+  "module.network.module.route_table.aws_route_table_association.pub_rt_subnets" -> "module.network.module.vpc.aws_subnet.subnets_creation";
+  "module.network.module.security_group.aws_security_group.alb_pub_sg" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.security_group.aws_security_group.asg_priv_sg" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.security_group.aws_security_group.bastion_sg" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.security_group.aws_security_group.db_sg" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.alb_egress_asg" -> "module.network.module.security_group.aws_security_group.alb_pub_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.alb_egress_asg" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.asg_egress_db" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.asg_egress_db" -> "module.network.module.security_group.aws_security_group.db_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.asg_egress_https" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.bastion_egress" -> "module.network.module.security_group.aws_security_group.bastion_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.db_egress" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_egress_rule.db_egress" -> "module.network.module.security_group.aws_security_group.db_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.alb_ingress_http" -> "module.network.module.security_group.aws_security_group.alb_pub_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.alb_ingress_https" -> "module.network.module.security_group.aws_security_group.alb_pub_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_alb" -> "module.network.module.security_group.aws_security_group.alb_pub_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_alb" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_bastion" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.asg_ingress_bastion" -> "module.network.module.security_group.aws_security_group.bastion_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.bastion_ingress" -> "module.network.module.security_group.aws_security_group.bastion_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.db_ingress_asg" -> "module.network.module.security_group.aws_security_group.asg_priv_sg";
+  "module.network.module.security_group.aws_vpc_security_group_ingress_rule.db_ingress_asg" -> "module.network.module.security_group.aws_security_group.db_sg";
+  "module.network.module.vpc.aws_subnet.subnets_creation" -> "module.network.module.vpc.data.aws_availability_zones.azs";
+  "module.network.module.vpc.aws_subnet.subnets_creation" -> "module.network.module.vpc.aws_vpc.main_vpc";
+  "module.s3_media_bucket.aws_s3_bucket_policy.s3_media_bucket_policy" -> "module.s3_media_bucket.aws_s3_bucket.s3_media";
+  "module.s3_media_bucket.aws_s3_bucket_policy.s3_media_bucket_policy" -> "module.s3_media_bucket.aws_vpc_endpoint.s3_endpoint";
+  "module.s3_media_bucket.aws_s3_bucket_public_access_block.public_access_block" -> "module.s3_media_bucket.aws_s3_bucket.s3_media";
+  "module.s3_media_bucket.aws_s3_bucket_server_side_encryption_configuration.sse" -> "module.s3_media_bucket.aws_s3_bucket.s3_media";
+  "module.s3_media_bucket.aws_vpc_endpoint.s3_endpoint" -> "module.network.module.route_table.aws_route_table.app_rt";
+  "module.ssm.aws_ssm_parameter.alb_dns" -> "module.api_gateway.aws_apigatewayv2_stage.prod";
+  "module.ssm.aws_ssm_parameter.cf_public_dns" -> "module.frontend.module.cf.aws_cloudfront_distribution.frontend_cdn";
+  "module.ssm.aws_ssm_parameter.cognito_client_id" -> "module.auth.aws_cognito_user_pool_client.user_pool_client";
+  "module.ssm.aws_ssm_parameter.cognito_domain" -> "module.auth.aws_cognito_user_pool_domain.blog_domain";
+  "module.ssm.aws_ssm_parameter.cognito_user_pool_id" -> "module.auth.aws_cognito_user_pool.user_pool";
+  "module.ssm.aws_ssm_parameter.db_endpoint" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.ssm.aws_ssm_parameter.db_name" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.ssm.aws_ssm_parameter.db_port" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.ssm.aws_ssm_parameter.db_secret_arn" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.ssm.aws_ssm_parameter.db_username" -> "module.database_rds.aws_db_instance.rds_main";
+  "module.ssm.aws_ssm_parameter.s3_media_bucket_name" -> "module.s3_media_bucket.aws_s3_bucket.s3_media";
+}

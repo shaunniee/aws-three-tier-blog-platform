@@ -21,6 +21,5 @@ variable "no_of_azs" {
 variable "subnets" {
   description = "A map of subnet types to subnet IDs"
   type        = map(list(string))
-
 }
 

@@ -1,21 +1,61 @@
+# IAM Role for CodeBuild
+
 resource "aws_iam_role" "codebuild_role" {
   name = "blog-backend-codebuild-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17",
+    Version   = "2012-10-17",
     Statement = [{ Effect = "Allow", Principal = { Service = "codebuild.amazonaws.com" }, Action = "sts:AssumeRole" }]
   })
 }
 
+# IAM Policy for CodeBuild Role
 resource "aws_iam_role_policy" "codebuild_policy" {
   role = aws_iam_role.codebuild_role.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      { Effect = "Allow", Action = ["ecr:*","logs:*","autoscaling:StartInstanceRefresh","autoscaling:DescribeAutoScalingGroups"], Resource = "*" }
+      {
+        Effect  = "Allow",
+        Action  = [
+          "ecr:GetAuthorizationToken"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:PutImage"
+        ],
+        Resource = "arn:aws:ecr:${var.aws_region}:${var.aws_account_id}:blog-backend/*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = [
+          "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:log-group:/aws/codebuild/*",
+          "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:log-group:/aws/codebuild/*:log-stream:*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "autoscaling:StartInstanceRefresh",
+          "autoscaling:DescribeAutoScalingGroups"
+        ],
+        Resource = "arn:aws:autoscaling:${var.aws_region}:${var.aws_account_id}:autoScalingGroup:*:autoScalingGroupName/${var.asg_name}"
+      }
     ]
   })
 }
 
+# IAM Policy for Frontend CodeBuild Role
 resource "aws_iam_role_policy" "frontend_codebuild_policy" {
   role = aws_iam_role.codebuild_role.id
 
@@ -36,16 +76,16 @@ resource "aws_iam_role_policy" "frontend_codebuild_policy" {
         ]
       },
       {
-        Effect = "Allow",
-        Action = ["cloudfront:CreateInvalidation"],
-        Resource = "*"
+        Effect   = "Allow",
+        Action   = ["cloudfront:CreateInvalidation"],
+        Resource = var.cloudfront_arn
       }
     ]
   })
 }
-
+# IAM Policy for CodeBuild Role to access Artifacts and SSM Parameters
 resource "aws_iam_role_policy" "codebuild_artifacts_access" {
-  role =  aws_iam_role.codebuild_role.id
+  role = aws_iam_role.codebuild_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -65,7 +105,7 @@ resource "aws_iam_role_policy" "codebuild_artifacts_access" {
           "ssm:GetParameters"
         ]
         Resource = [
-          "arn:aws:ssm:eu-west-1:721937028630:parameter/blogapp/*"
+          "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.name_prefix}/*"
         ]
       }
 
@@ -73,7 +113,6 @@ resource "aws_iam_role_policy" "codebuild_artifacts_access" {
   })
 }
 
-data "aws_caller_identity" "current" {}
 
 
 resource "aws_codebuild_project" "backend_build" {
@@ -92,17 +131,17 @@ resource "aws_codebuild_project" "backend_build" {
     image           = "aws/codebuild/standard:7.0"
     type            = "LINUX_CONTAINER"
     privileged_mode = true
-     environment_variable {
+    environment_variable {
       name  = "AWS_ACCOUNT_ID"
-      value = data.aws_caller_identity.current.account_id
+      value = var.aws_account_id
     }
-    
+
     environment_variable {
       name  = "AWS_REGION"
-      value = var.AWS_REGION
+      value = var.aws_region
     }
     environment_variable {
-      name = "ASG_NAME"
+      name  = "ASG_NAME"
       value = var.asg_name
     }
   }
@@ -115,8 +154,8 @@ resource "aws_codebuild_project" "frontend_build" {
   service_role = aws_iam_role.codebuild_role.arn
 
   source {
-    type      = "CODEPIPELINE"           # using pipeline artifact
-    buildspec = "frontend/frontend/buildspec.yml"
+    type      = "CODEPIPELINE" # using pipeline artifact
+    buildspec = "frontend/buildspec.yml"
   }
 
   environment {
@@ -127,7 +166,7 @@ resource "aws_codebuild_project" "frontend_build" {
 
     environment_variable {
       name  = "AWS_REGION"
-      value = var.AWS_REGION
+      value = var.aws_region
     }
 
     environment_variable {
@@ -140,31 +179,31 @@ resource "aws_codebuild_project" "frontend_build" {
       value = var.cf_id
     }
     environment_variable {
-      name = "VITE_API_BASE_URL"
-      type = "PARAMETER_STORE"
-      value = "/blogapp/alb/dns"
+      name  = "VITE_API_BASE_URL"
+      type  = "PARAMETER_STORE"
+      value = "/${var.name_prefix}/alb/dns"
     }
-          environment_variable {
-          name = "VITE_COGNITO_USER_POOL_ID"
-          type = "PARAMETER_STORE"
-          value = "/blogapp/cognito/user_pool_id"
-        }
-         environment_variable {
-          name = "VITE_COGNITO_CLIENT_ID"
-          type = "PARAMETER_STORE"
-          value = "/blogapp/cognito/app_client_id"
-        }
-        
-        environment_variable {
-          name = "VITE_COGNITO_DOMAIN"
-          type = "PARAMETER_STORE"
-          value = "/blogapp/cognito/domain"
-        }
-           environment_variable {
-          name = "VITE_CALLBACK_URL"
-          type = "PARAMETER_STORE"
-          value = "/blogapp/cloudfront/public_dns"
-        }
+    environment_variable {
+      name  = "VITE_COGNITO_USER_POOL_ID"
+      type  = "PARAMETER_STORE"
+      value = "/${var.name_prefix}/cognito/user_pool_id"
+    }
+    environment_variable {
+      name  = "VITE_COGNITO_CLIENT_ID"
+      type  = "PARAMETER_STORE"
+      value = "/${var.name_prefix}/cognito/app_client_id"
+    }
+
+    environment_variable {
+      name  = "VITE_COGNITO_DOMAIN"
+      type  = "PARAMETER_STORE"
+      value = "/${var.name_prefix}/cognito/domain"
+    }
+    environment_variable {
+      name  = "VITE_CALLBACK_URL"
+      type  = "PARAMETER_STORE"
+      value = "/${var.name_prefix}/cloudfront/public_dns"
+    }
 
 
   }

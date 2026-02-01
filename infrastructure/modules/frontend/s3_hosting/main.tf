@@ -3,11 +3,14 @@ resource "random_id" "frontend_bucket_suffix" {
 }
 
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = "blog-frontend-bucket-${random_id.frontend_bucket_suffix.hex}"
-
-  tags = {
-    Name = "Blog Frontend Bucket"
-  }
+  bucket        = "${var.name_prefix}-${random_id.frontend_bucket_suffix.hex}"
+  force_destroy = true
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.name_prefix}-frontend-bucket"
+    }
+  )
 }
 
 resource "aws_s3_bucket_website_configuration" "frontend_bucket_website" {

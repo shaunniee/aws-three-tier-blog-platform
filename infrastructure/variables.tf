@@ -44,7 +44,7 @@ variable "name_prefix" {
   description = "Prefix for resource names"
   type        = string
   default     = "blogapp"
-  
+
 }
 
 variable "github_oauth_token" {

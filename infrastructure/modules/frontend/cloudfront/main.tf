@@ -9,8 +9,7 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
   origin {
     domain_name = var.bucket_regional_domain_name
     origin_id   = "s3-frontend"
-    
-  
+
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.frontend_oai.cloudfront_access_identity_path
     }
@@ -44,22 +43,4 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
   tags = {
     Name = "Blog Frontend CDN"
   }
-}
-
-resource "aws_s3_bucket_policy" "frontend_bucket_policy" {
-  bucket = var.frontend_bucket
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          AWS = aws_cloudfront_origin_access_identity.frontend_oai.iam_arn
-        },
-        Action = "s3:GetObject",
-        Resource = "arn:aws:s3:::${var.frontend_bucket}/*"
-      }
-    ]
-  })
 }

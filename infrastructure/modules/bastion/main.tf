@@ -1,7 +1,6 @@
 data "aws_ami" "bastion_ami" {
   most_recent = true
   owners      = ["amazon"]
-
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
@@ -20,7 +19,7 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids      = [var.bastion_sg_id]
   key_name                    = "blogapp-bastion-key"
   associate_public_ip_address = true
-  tags = {
+  tags = merge(var.tags, {
     Name = "${var.name_prefix}-bastion"
-  }
+  })
 }

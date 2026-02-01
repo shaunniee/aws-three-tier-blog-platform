@@ -3,6 +3,16 @@ variable "name_prefix" {
   type        = string
 }
 
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWS Region"
+  type        = string
+}
+
 variable "vpc_id" {
   description = "VPC ID where resources will be created"
   type        = string
@@ -52,7 +62,7 @@ variable "s3_arn" {
 variable "db_secret_arn" {
   description = "The ARN of the RDS DB Secret"
   type        = string
-  
+
 }
 variable "cog_user_pool_arn" {
   description = "The ARN of the Cognito User Pool"

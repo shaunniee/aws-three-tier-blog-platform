@@ -190,18 +190,9 @@ locals {
       from_port  = 5432
       to_port    = 5432
       action     = "allow"
-      cidr_block = "0.0.0.0/0" //var.app_subnet_cidr[0]
+      cidr_block = var.app_subnet_cidr[0]
     },
-    {
-      name       = "temporary-allow-all"
-      rule_no    = 102
-      protocol   = "-1"
-      from_port  = 0
-      to_port    = 0
-      action     = "allow"
-      cidr_block = "0.0.0.0/0"
-    },
-    
+
     {
       name       = "ingress from app subnet 2"
       rule_no    = 101
@@ -211,7 +202,7 @@ locals {
       action     = "allow"
       cidr_block = var.app_subnet_cidr[1]
     },
-    
+
     {
       name       = "egress-allow-ephemeral-ports to app subnet 1"
       rule_no    = 120
@@ -231,16 +222,6 @@ locals {
       to_port    = 65535
       action     = "allow"
       cidr_block = var.app_subnet_cidr[1]
-    },
-    {
-      name       = "temporary-allow-egress-all"
-      rule_no    = 110
-      protocol   = "-1"
-      from_port  = 0
-      to_port    = 0
-      action     = "allow"
-      egress     = true
-      cidr_block = "0.0.0.0/0"
-  }
+    }
   ]
 }

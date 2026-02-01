@@ -11,30 +11,30 @@ variable "db_name" {
   type        = string
 }
 variable "db_username" {
-    description = "Database username"
-    type        = string
-  
+  description = "Database username"
+  type        = string
+
 }
 variable "s3_media_bucket_name" {
-    description = "S3 Media Bucket Name"
-    type        = string
+  description = "S3 Media Bucket Name"
+  type        = string
 }
 
 variable "db_secret_arn" {
-    description = "The ARN of the RDS DB instance secret"
-    type        = string
-  
+  description = "The ARN of the RDS DB instance secret"
+  type        = string
+
 }
 
 variable "cognito_client_id" {
-    description = "The ID of the Cognito User Pool Client"
-    type        = string
-  
+  description = "The ID of the Cognito User Pool Client"
+  type        = string
+
 }
 variable "cognito_user_pool_id" {
-    description = "The ID of the Cognito User Pool"
-    type        = string
-  
+  description = "The ID of the Cognito User Pool"
+  type        = string
+
 }
 variable "cognito_domain" {
   description = "The domain of the Cognito User Pool"
@@ -46,5 +46,9 @@ variable "alb_dns" {
 }
 variable "cf_public_dns" {
   description = "The CloudFront Public DNS"
+  type        = string
+}
+variable "name_prefix" {
+  description = "Prefix for naming resources"
   type        = string
 }

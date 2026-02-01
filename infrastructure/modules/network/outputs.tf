@@ -1,17 +1,17 @@
 
 output "subnet_ids" {
   description = "List of subnet IDs"
-  value       = module.network.subnet_ids
+  value       = module.vpc.subnet_ids
 }
 
 output "subnet_info" {
   description = "Detailed information about subnets"
-  value       = module.network.subnet_info
+  value       = module.vpc.subnet_info
 }
 
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = module.network.vpc_id
+  value       = module.vpc.vpc_id
 }
 
 output "igw_id" {
@@ -28,25 +28,26 @@ output "nat_gw_id" {
 
 output "sg_bastion_id" {
   description = "The ID of the Bastion Security Group"
-  value = module.security_group.sg_bastion_id
+  value       = module.security_group.sg_bastion_id
 }
 
 output "sg_alb_id" {
   description = "The ID of the ALB Public Security Group"
-  value = module.security_group.sg_alb_id
+  value       = module.security_group.sg_alb_id
 }
+
 output "sg_asg_id" {
   description = "The ID of the ASG Private Security Group"
-  value = module.security_group.sg_asg_id
+  value       = module.security_group.sg_asg_id
 }
 
 output "sg_db_id" {
   description = "The ID of the DB Security Group"
-  value = module.security_group.sg_db_id
+  value       = module.security_group.sg_db_id
 }
 
 output "app_rt_id" {
-    description = "The ID of the application route table"
-    value       = module.route_table.app_rt_id
-  
+  description = "The ID of the application route table"
+  value       = module.route_table.app_rt_id
+
 }
