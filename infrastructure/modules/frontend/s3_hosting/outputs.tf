@@ -12,3 +12,8 @@ output "s3_hosting_bucket" {
     value = aws_s3_bucket.frontend_bucket.bucket
   
 }
+
+output "cf_public_dns" {
+    value = module.cloudfront.cf_public_dns
+  
+}

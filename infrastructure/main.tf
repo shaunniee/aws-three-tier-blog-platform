@@ -96,5 +96,7 @@ module "frontend" {
 module "api_gateway" {
   source          = "./modules/api_gateway"
   backend_alb_dns = module.backend.alb_public_dns
+  cf_public_dns = module.frontend.cf_public_dns
+  
 
 }
