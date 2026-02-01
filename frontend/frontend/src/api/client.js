@@ -11,7 +11,7 @@ export async function apiFetch(path, options = {}) {
   }
 
   const res = await fetch(
-    `https://${import.meta.env.VITE_API_BASE_URL}${path}`,
+    `${import.meta.env.VITE_API_BASE_URL}${path}`,
     { ...options, headers }
   );
 
