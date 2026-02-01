@@ -15,3 +15,8 @@ output "cog_user_pool_arn" {
     value       = aws_cognito_user_pool.user_pool.arn
   
 }
+output "cognito_domain" {
+    description = "The domain of the Cognito User Pool"
+    value       = aws_cognito_user_pool_domain.blog_domain.domain
+  
+}
