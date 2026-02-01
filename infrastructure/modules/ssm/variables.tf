@@ -36,3 +36,11 @@ variable "cognito_user_pool_id" {
     type        = string
   
 }
+variable "cognito_domain" {
+  description = "The domain of the Cognito User Pool"
+  type        = string
+}
+variable "alb_dns" {
+  description = "The DNS of the Application Load Balancer"
+  type        = string
+}

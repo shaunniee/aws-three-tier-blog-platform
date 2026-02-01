@@ -46,3 +46,14 @@ resource "aws_ssm_parameter" "cognito_client_id" {
     value = var.cognito_client_id
 }
 
+resource "aws_ssm_parameter" "cognito_domain" {
+    name  = "/blogapp/cognito/domain"
+    type  = "String"
+    value = var.cognito_domain
+}
+
+resource "aws_ssm_parameter" "alb_dns" {
+    name  = "/blogapp/alb/dns"
+    type  = "String"
+    value = var.alb_dns
+}

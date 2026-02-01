@@ -70,6 +70,10 @@ module "ssm" {
   db_secret_arn = module.database_rds.db_secret_arn
   cognito_user_pool_id = module.auth.cognito_user_pool_id
   cognito_client_id = module.auth.cognito_client_id
+  cognito_domain = module.auth.cognito_domain
+  alb_dns = module.backend.alb_public_dns
+  
+  
   
 }
 

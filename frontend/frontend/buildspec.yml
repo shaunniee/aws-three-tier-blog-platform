@@ -26,7 +26,7 @@ phases:
       - echo Syncing to S3...
       - ls -la
       - pwd
-      - aws s3 sync build/ s3://$FRONTEND_BUCKET/ --delete
+      - aws s3 sync dist/ s3://$FRONTEND_BUCKET/ --delete
       - echo Invalidating CloudFront...
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
 
