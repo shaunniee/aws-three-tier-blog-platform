@@ -77,6 +77,14 @@ module "cd_cd" {
   source = "./modules/ci_cd"  
   github_oauth_token=var.github_oauth_token
   asg_name=module.backend.asg_name
+  s3_arn= module.frontend.s3_arn
+  cf_id =module.frontend.cf_id
+  s3_hosting_bucket=module.frontend.s3_hosting_bucket
   
+  
+}
 
+module "frontend" {
+  source = "./modules/frontend"
+  
 }

@@ -62,4 +62,20 @@ resource "aws_codepipeline" "backend_pipeline" {
       }
     }
   }
+
+  stage {
+  name = "Build_Frontend"
+  action {
+    name             = "Build_Frontend"
+    category         = "Build"
+    owner            = "AWS"
+    provider         = "CodeBuild"
+    version          = "1"
+    input_artifacts  = ["source_out"]
+    output_artifacts = []
+    configuration = {
+      ProjectName = var.codebuild_frontend_proj_name
+    }
+  }
+}
 }

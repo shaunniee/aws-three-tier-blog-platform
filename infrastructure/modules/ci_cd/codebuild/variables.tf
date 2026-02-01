@@ -20,3 +20,18 @@ variable "asg_name" {
     type = string
   
 }
+
+variable "s3_arn" {
+    type = string
+  
+}
+
+variable "cf_id" {
+
+    type = string
+  
+}
+variable "s3_hosting_bucket" {
+    type = string
+  
+}

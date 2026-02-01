@@ -14,3 +14,8 @@ variable "codebuild_proj_name" {
     type = string
   
 }
+variable "codebuild_frontend_proj_name" {
+    description = "Codebuild frontend proj name"
+    type = string
+  
+}
