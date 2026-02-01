@@ -71,7 +71,7 @@ resource "aws_codepipeline" "backend_pipeline" {
     owner            = "AWS"
     provider         = "CodeBuild"
     version          = "1"
-    input_artifacts  = ["source_out"]
+    input_artifacts  = ["source_output"]
     output_artifacts = []
     configuration = {
       ProjectName = var.codebuild_frontend_proj_name

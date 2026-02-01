@@ -104,8 +104,7 @@ resource "aws_codebuild_project" "frontend_build" {
   service_role = aws_iam_role.codebuild_role.arn
 
   source {
-    type      = "GITHUB"
-    location  = var.github_repo_url
+    type      = "CODEPIPELINE"           # using pipeline artifact
     buildspec = "frontend/frontend/buildspec.yml"
   }
 
@@ -131,5 +130,5 @@ resource "aws_codebuild_project" "frontend_build" {
     }
   }
 
-  artifacts { type = "NO_ARTIFACTS" }
+  artifacts { type = "CODEPIPELINE" }
 }
