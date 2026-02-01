@@ -44,3 +44,21 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
     Name = "Blog Frontend CDN"
   }
 }
+
+resource "aws_s3_bucket_policy" "frontend_bucket_policy" {
+  bucket = var.frontend_bucket
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          AWS = aws_cloudfront_origin_access_identity.frontend_oai.iam_arn
+        },
+        Action = "s3:GetObject",
+        Resource = "arn:aws:s3:::${var.frontend_bucket}/*"
+      }
+    ]
+  })
+}

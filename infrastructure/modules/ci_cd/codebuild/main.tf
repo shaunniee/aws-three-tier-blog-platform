@@ -139,6 +139,28 @@ resource "aws_codebuild_project" "frontend_build" {
       name  = "CLOUDFRONT_ID"
       value = var.cf_id
     }
+    environment_variable {
+      name = "VITE_API_BASE_URL"
+      type = "PARAMETER_STORE"
+      value = "/blogapp/alb/dns"
+    }
+          environment_variable {
+          name = "VITE_COGNITO_USER_POOL_ID"
+          type = "PARAMETER_STORE"
+          value = "/blogapp/cognito/user_pool_id"
+        }
+         environment_variable {
+          name = "VITE_COGNITO_CLIENT_ID"
+          type = "PARAMETER_STORE"
+          value = "/blogapp/cognito/app_client_id"
+        }
+        
+        environment_variable {
+          name = "VITE_COGNITO_DOMAIN"
+          type = "PARAMETER_STORE"
+          value = "/blogapp/cognito/domain"
+        }
+
 
   }
 
