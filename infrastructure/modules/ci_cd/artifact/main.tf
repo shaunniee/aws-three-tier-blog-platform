@@ -6,10 +6,6 @@ resource "aws_s3_bucket" "codepipeline_artifacts" {
   }
 }
 
-resource "aws_s3_bucket_acl" "s3_acl" {
-  bucket = aws_s3_bucket.codepipeline_artifacts.id
-  acl = "private"
-}
 
 resource "aws_s3_bucket_public_access_block" "example" {
   bucket = aws_s3_bucket.codepipeline_artifacts.id

@@ -12,7 +12,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      { Effect = "Allow", Action = ["codebuild:BatchGetBuilds","codebuild:StartBuild"], Resource = aws_codebuild_project.backend_build.arn },
+      { Effect = "Allow", Action = ["codebuild:BatchGetBuilds","codebuild:StartBuild"], Resource = var.codebuild_proj_name },
       { Effect = "Allow", Action = ["s3:GetObject","s3:GetObjectVersion","s3:PutObject"], Resource = "*" }
     ]
   })

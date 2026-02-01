@@ -16,6 +16,24 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   })
 }
 
+resource "aws_iam_role_policy" "codebuild_artifacts_access" {
+  role =  aws_iam_role.codebuild_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:GetObjectVersion"
+        ]
+        Resource = "arn:aws:s3:::${var.codepipeline_artifact_bucket}/*"
+      }
+    ]
+  })
+}
+
 data "aws_caller_identity" "current" {}
 
 

@@ -10,3 +10,9 @@ variable "github_repo_url" {
     default = "https://github.com/shaunniee/aws-three-tier-blog-platform.git"
   
 }
+
+variable "codepipeline_artifact_bucket" {
+    description = "artifact bucket"
+    type = string
+  
+}
