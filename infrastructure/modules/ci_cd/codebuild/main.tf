@@ -29,6 +29,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ecr:BatchGetImage",
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
         ],
         Resource = "arn:aws:ecr:${var.aws_region}:${var.aws_account_id}:repository/blog-backend"
       },
