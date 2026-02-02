@@ -7,8 +7,7 @@ variable "AWS_REGION" {
 variable "github_repo_url" {
   description = "Github repo"
   type        = string
-  default     = "https://github.com/shaunniee/aws-three-tier-blog-platform.git"
-
+  default     = ""
 }
 
 variable "github_oauth_token" {

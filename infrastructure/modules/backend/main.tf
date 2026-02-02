@@ -89,7 +89,7 @@ resource "aws_launch_template" "l_temp" {
     name = module.instance_profile.backend_instance_profile
   }
 
-  user_data = base64encode(local.user_data)
+  user_data = var.enable_backend ? base64encode(local.user_data) : base64decode(var.app_user_data)
 
   tag_specifications {
     resource_type = "instance"

@@ -42,6 +42,8 @@ module "backend" {
   cog_user_pool_arn = module.auth.cog_user_pool_arn
   name_prefix       = local.name_prefix
   tags              = var.tags
+  enable_backend    = var.enable_backend
+
 }
 
 module "api_gateway" {
@@ -87,6 +89,7 @@ module "ci_cd" {
   cf_id              = module.frontend.cf_id
   s3_hosting_bucket  = module.frontend.s3_hosting_bucket
   cloudfront_arn     = module.frontend.cloudfront_arn
+  github_repo_url = var.github_repo_url
   
 }
 

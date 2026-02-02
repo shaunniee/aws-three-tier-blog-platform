@@ -68,3 +68,10 @@ variable "cog_user_pool_arn" {
   description = "The ARN of the Cognito User Pool"
   type        = string
 }
+
+variable "enable_backend" {
+  description = "Enable EC2 userdata for backend"
+  type        = bool
+  default     = false
+  
+}

@@ -53,4 +53,14 @@ variable "github_oauth_token" {
   sensitive   = true
 }
 
+variable "enable_backend" {
+  description = "enable ec2 userdata for backend"
+  type        = bool
+  default     = false
+}
 
+variable "github_repo_url" {
+  description = "Github repo"
+  type        = string
+  default     = ""
+}
